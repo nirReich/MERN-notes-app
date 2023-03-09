@@ -8,15 +8,27 @@ import * as NotesApi from "../../network/notes_api";
 type Props = {
   onDismiss: () => void;
   onNoteSaved: (note:Note)=>void
+  noteToEdit?: Note
 };
 
-function AddNoteDialog({ onDismiss, onNoteSaved }: Props) {
+function AddAndEditNoteDialog({ onDismiss, onNoteSaved, noteToEdit }: Props) {
 
-    const { register, handleSubmit, watch, formState: { errors, isSubmitting }  } = useForm<NoteInput>()
+    const { register, handleSubmit, watch, formState: { errors, isSubmitting }  } = useForm<NoteInput>({
+      defaultValues:{
+        title:noteToEdit?.title || "",
+        text: noteToEdit?.text || ""
+      }
+    })
 
     async function onSubmit(input:NoteInput) {
         try {
-            const noteRes = await NotesApi.createNote(input);
+            let noteRes:Note;
+
+            if (noteToEdit) {
+              noteRes = await NotesApi.updateNote(noteToEdit._id, input)
+            } else{
+              noteRes = await NotesApi.createNote(input);
+            }
             onNoteSaved(noteRes)
         } catch (error) {
             console.log(error);
@@ -29,14 +41,16 @@ function AddNoteDialog({ onDismiss, onNoteSaved }: Props) {
   return (
     <Modal show onHide={onDismiss}>
       <Modal.Header closeButton>
-        <Modal.Title>Add Note</Modal.Title>
+        <Modal.Title>
+          {noteToEdit ? "Edit Note" : "Add Note"}
+          </Modal.Title>
       </Modal.Header>
 
       <Modal.Body>
-        <Form id="addNoteForm" onSubmit={handleSubmit(onSubmit)}>
+        <Form id="addEditNoteForm" onSubmit={handleSubmit(onSubmit)}>
           <Form.Group className="mb-3">
             <Form.Label>Note Title</Form.Label>
-            <Form.Control type="text" placeholder="Title" isInvalid={!!errors.title} {...register("title",{required:"Required"})}/>
+            <Form.Control type="text" placeholder="Title" isInvalid={!!errors.title} {...register("title",{required:"required"})}/>
             <Form.Control.Feedback type="invalid">
                 {errors.title?.message}
             </Form.Control.Feedback>
@@ -50,7 +64,7 @@ function AddNoteDialog({ onDismiss, onNoteSaved }: Props) {
         </Form>
       </Modal.Body>
       <Modal.Footer>
-        <Button type="submit" form="addNoteForm" disabled= {isSubmitting}>
+        <Button type="submit" form="addEditNoteForm" disabled= {isSubmitting}>
           Submit
         </Button>
       </Modal.Footer>
@@ -58,4 +72,4 @@ function AddNoteDialog({ onDismiss, onNoteSaved }: Props) {
   );
 }
 
-export default AddNoteDialog;
+export default AddAndEditNoteDialog;
