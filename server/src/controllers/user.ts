@@ -13,6 +13,20 @@ interface LoginBody {
   username?: string;
   password?: string;
 }
+
+export const getAuthenticatedUser: RequestHandler = async (req, res, next) => {
+  const authUser = req.session.userId;
+  try {
+    if (!authUser) {
+      throw createHttpError(401, "User not authenticated!");
+    }
+    const user = await UserModel.findById(authUser).select("+email").exec();
+    res.status(200).json(user);
+  } catch (error) {
+    next(error);
+  }
+};
+
 export const signUp: RequestHandler<
   unknown,
   unknown,
@@ -63,8 +77,8 @@ export const login: RequestHandler<
 > = async (req, res, next) => {
   const userName = req.body.username;
   const password = req.body.password;
-  console.log(userName ,password);
-  
+  console.log(userName, password);
+
   try {
     if (!userName || !password) {
       throw createHttpError(400, "Parameters missing!");
@@ -88,4 +102,14 @@ export const login: RequestHandler<
   } catch (error) {
     next(error);
   }
+};
+
+export const logout: RequestHandler = (req, res, next) => {
+  req.session.destroy((err) => {
+    if (err) {
+      next(err);
+    } else {
+      res.sendStatus(200);
+    }
+  });
 };
