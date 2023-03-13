@@ -4,6 +4,7 @@ import { useForm } from "react-hook-form";
 import { Note } from "../../models/notes";
 import { NoteInput } from "../../network/notes_api";
 import * as NotesApi from "../../network/notes_api";
+import TextInputField from "../form/TextInputField";
 
 type Props = {
   onDismiss: () => void;
@@ -48,18 +49,23 @@ function AddAndEditNoteDialog({ onDismiss, onNoteSaved, noteToEdit }: Props) {
 
       <Modal.Body>
         <Form id="addEditNoteForm" onSubmit={handleSubmit(onSubmit)}>
-          <Form.Group className="mb-3">
-            <Form.Label>Note Title</Form.Label>
-            <Form.Control type="text" placeholder="Title" isInvalid={!!errors.title} {...register("title",{required:"required"})}/>
-            <Form.Control.Feedback type="invalid">
-                {errors.title?.message}
-            </Form.Control.Feedback>
-          </Form.Group>
-
-          <Form.Group className="mb-3">
-            <Form.Label>Note Text</Form.Label>
-            <Form.Control as="textarea" rows={5} placeholder="Text" {...register("text")}/>
-          </Form.Group>
+          <TextInputField 
+          name="title"
+          label="Title"
+          type="text"
+          placeholder="Title"
+          register={register}
+          registerOptions={{required: "Required"}}
+          error={errors.title}
+          />
+          <TextInputField 
+          name="text"
+          label="Text"
+          as="textarea"
+          rows={5}
+          placeholder="Note text"
+          register={register}
+          />
 
         </Form>
       </Modal.Body>
