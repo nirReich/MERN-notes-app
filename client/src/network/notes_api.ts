@@ -93,5 +93,5 @@ export async function updateNote(
 }
 
 export async function deleteNote(noteId: string) {
-  await fetchData(`api/notes${noteId}`, { method: "DELETE" });
+  await fetchData(`/api/notes/${noteId}`, { method: "DELETE" });
 }

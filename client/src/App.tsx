@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Button, Col, Container, Row, Spinner } from "react-bootstrap";
-import AddAndEditNoteDialog from "./components/addNoteDialog/AddAndEditNoteDialog";
+import AddAndEditNoteDialog from "./components/AddAndEditNoteDialog";
 import Note from "./components/note/Note";
 import { Note as NoteModel } from "./models/notes";
 import * as NotesApi from "./network/notes_api";

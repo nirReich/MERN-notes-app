@@ -1,10 +1,10 @@
 import React from "react";
 import { Button, Form, Modal } from "react-bootstrap";
 import { useForm } from "react-hook-form";
-import { Note } from "../../models/notes";
-import { NoteInput } from "../../network/notes_api";
-import * as NotesApi from "../../network/notes_api";
-import TextInputField from "../form/TextInputField";
+import { Note } from "../models/notes";
+import { NoteInput } from "../network/notes_api";
+import * as NotesApi from "../network/notes_api";
+import TextInputField from "./form/TextInputField";
 
 type Props = {
   onDismiss: () => void;
