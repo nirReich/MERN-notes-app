@@ -1,57 +1,47 @@
 import React from "react";
-import { Button, Form, Modal } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import { User } from "../models/user";
+import { loginCredentials } from "../network/notes_api";
 import * as NotesApi from "../network/notes_api";
+import { Button, Form, Modal } from "react-bootstrap";
 import TextInputField from "./form/TextInputField";
 import styleUtils from "../styles/utils.module.css";
 
 type Props = {
   onDismiss: () => void;
-  onSignupSuccesses: (user: User) => void;
+  onLoginSuccesses: (user: User) => void;
 };
 
-function SignupModal({ onDismiss, onSignupSuccesses }: Props) {
+function LoginModal({ onDismiss, onLoginSuccesses }: Props) {
   const {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
-  } = useForm<NotesApi.SignUpCredentials>();
-
-  async function onSubmit(credentials: NotesApi.SignUpCredentials) {
+  } = useForm<loginCredentials>();
+  async function onSubmit(credentials: loginCredentials) {
     try {
-      const newUser = await NotesApi.signUp(credentials);
-      onSignupSuccesses(newUser);
+      const user = await NotesApi.login(credentials);
+      onLoginSuccesses(user);
     } catch (error) {
       alert(error);
       console.log(error);
     }
   }
-
   return (
     <Modal show onHide={onDismiss}>
       <Modal.Header closeButton>
-        <Modal.Title>Sign Up</Modal.Title>
+        <Modal.Title>Log In</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <Form onSubmit={handleSubmit(onSubmit)}>
           <TextInputField
-            name="userName"
+            name="username"
             label="Username"
             type="text"
             placeholder="Username"
             register={register}
             registerOptions={{ required: "Required" }}
             error={errors.username}
-          />
-          <TextInputField
-            name="email"
-            label="Email"
-            type="email"
-            placeholder="Email"
-            register={register}
-            registerOptions={{ required: "Required" }}
-            error={errors.email}
           />
           <TextInputField
             name="password"
@@ -67,7 +57,7 @@ function SignupModal({ onDismiss, onSignupSuccesses }: Props) {
             disabled={isSubmitting}
             className={styleUtils.width100}
           >
-            Sign Up
+            Login
           </Button>
         </Form>
       </Modal.Body>
@@ -75,4 +65,4 @@ function SignupModal({ onDismiss, onSignupSuccesses }: Props) {
   );
 }
 
-export default SignupModal;
+export default LoginModal;

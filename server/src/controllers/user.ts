@@ -36,6 +36,11 @@ export const signUp: RequestHandler<
   const userName = req.body.userName;
   const email = req.body.email;
   const passwordRaw = req.body.password;
+  console.log(`=========== ${userName}`);
+  console.log(`=========== ${email}`);
+  console.log(`=========== ${passwordRaw}`);
+  
+  
 
   try {
     if (!userName || !email || !passwordRaw) {

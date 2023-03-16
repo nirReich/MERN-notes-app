@@ -8,6 +8,8 @@ import styles from "./styles/NotesPage.module.css";
 import styleUtils from "./styles/utils.module.css";
 import { FaPlus } from "react-icons/fa";
 import { existsSync } from "fs";
+import SignupModal from "./components/SignupModal";
+import LoginModal from "./components/LoginModal";
 
 function App() {
   const [notes, setNotes] = useState<NoteModel[]>([]);
@@ -106,6 +108,9 @@ function App() {
           }}
         />
       )}
+      {false && <SignupModal onDismiss={()=>{}} onSignupSuccesses={()=>{}}/>}
+      {false && <LoginModal onDismiss={()=>{}} onLoginSuccesses={()=>{}}/>}
+      
     </Container>
   );
 }
