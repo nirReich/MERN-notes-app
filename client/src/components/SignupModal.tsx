@@ -1,17 +1,16 @@
-import React from "react";
 import { Button, Form, Modal } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import { User } from "../models/user";
 import * as NotesApi from "../network/notes_api";
-import TextInputField from "./form/TextInputField";
 import styleUtils from "../styles/utils.module.css";
+import TextInputField from "./form/TextInputField";
 
 type Props = {
   onDismiss: () => void;
-  onSignupSuccesses: (user: User) => void;
+  onSignUpSuccesses: (user: User) => void;
 };
 
-function SignupModal({ onDismiss, onSignupSuccesses }: Props) {
+function SignupModal({ onDismiss, onSignUpSuccesses: onSignupSuccesses }: Props) {
   const {
     register,
     handleSubmit,
