@@ -8,9 +8,7 @@ import Note from './note/Note';
 import styles from "../styles/NotesPage.module.css";
 import styleUtils from "../styles/utils.module.css";
 
-type Props = {}
-
-function NotesPageLoggedInView({}: Props) {
+function NotesPageLoggedInView() {
     const [notes, setNotes] = useState<NoteModel[]>([]);
     const [showAddModal, setShowAddModal] = useState(false);
     const [noteToEdit, setNoteToEdit] = useState<NoteModel | null>(null);
@@ -76,7 +74,7 @@ function NotesPageLoggedInView({}: Props) {
       {!notesLoading && !showNotesLoadError && 
       <>
         {
-          notes.length > 0 ? notesGrid : <p>You don't have any notes yet!</p>
+          notes.length > 0 ? notesGrid : <p className={`${styleUtils.whiteText}`}>You don't have any notes yet!</p>
         }
       </>
       }
