@@ -17,9 +17,7 @@ interface LoginBody {
 export const getAuthenticatedUser: RequestHandler = async (req, res, next) => {
   const authUser = req.session.userId;
   try {
-    if (!authUser) {
-      throw createHttpError(401, "User not authenticated!");
-    }
+   
     const user = await UserModel.findById(authUser).select("+email").exec();
     res.status(200).json(user);
   } catch (error) {
