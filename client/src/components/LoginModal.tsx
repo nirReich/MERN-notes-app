@@ -1,11 +1,12 @@
-import React from "react";
+import { useState } from "react";
+import { Alert, Button, Form, Modal } from "react-bootstrap";
 import { useForm } from "react-hook-form";
+import { UnauthorizedError } from "../errors/http_errors";
 import { User } from "../models/user";
-import { loginCredentials } from "../network/notes_api";
 import * as NotesApi from "../network/notes_api";
-import { Button, Form, Modal } from "react-bootstrap";
-import TextInputField from "./form/TextInputField";
+import { loginCredentials } from "../network/notes_api";
 import styleUtils from "../styles/utils.module.css";
+import TextInputField from "./form/TextInputField";
 
 type Props = {
   onDismiss: () => void;
@@ -13,6 +14,7 @@ type Props = {
 };
 
 function LoginModal({ onDismiss, onLoginSuccesses }: Props) {
+  const [errorText, setErrorText] = useState<string | null>(null);
   const {
     register,
     handleSubmit,
@@ -23,7 +25,11 @@ function LoginModal({ onDismiss, onLoginSuccesses }: Props) {
       const user = await NotesApi.login(credentials);
       onLoginSuccesses(user);
     } catch (error) {
-      alert(error);
+      if (error instanceof UnauthorizedError) {
+        setErrorText(error.message);
+      } else {
+        alert(error);
+      }
       console.log(error);
     }
   }
@@ -33,6 +39,7 @@ function LoginModal({ onDismiss, onLoginSuccesses }: Props) {
         <Modal.Title>Log In</Modal.Title>
       </Modal.Header>
       <Modal.Body>
+        {errorText && <Alert variant="danger">{errorText}</Alert>}
         <Form onSubmit={handleSubmit(onSubmit)}>
           <TextInputField
             name="username"

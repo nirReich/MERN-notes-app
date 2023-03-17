@@ -1,14 +1,10 @@
 import { useEffect, useState } from "react";
-import { Container } from "react-bootstrap";
 import LoginModal from "./components/LoginModal";
 import Navigation from "./components/Navigation";
 import SignUpModal from "./components/SignupModal";
 import { User } from "./models/user";
-import styles from "./styles/NotesPage.module.css";
 import * as NotesApi from "./network/notes_api";
-import NotesPageLoggedInView from "./components/NotesPageLoggedInView";
-import NotesPageLoggedOutView from "./components/NotesPageLoggedOutView";
-
+import NotesPage from "./pages/NotePage"
 function App() {
   const [loggedInUser, setLoggedInUser] = useState<User | null>(null);
   const [showSignUpModal, setShowSignUpModal] = useState(false);
@@ -40,15 +36,7 @@ function App() {
           setLoggedInUser(null);
         }}
       />
-      <Container className={styles.notesPage}>
-        <>
-          {loggedInUser ? (
-            <NotesPageLoggedInView />
-          ) : (
-            <NotesPageLoggedOutView />
-          )}
-        </>
-      </Container>
+      <NotesPage loggedInUser={loggedInUser}/>
       {showSignUpModal && (
         <SignUpModal
           onDismiss={() => {
